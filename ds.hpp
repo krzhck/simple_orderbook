@@ -18,10 +18,4 @@ enum class OrderType
     SELL
 };
 
-struct PriceLevel
-{
-	const price_t price;
-	qty_t qty;
-};
-
 #endif // DS_HPP
