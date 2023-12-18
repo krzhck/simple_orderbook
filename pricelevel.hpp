@@ -2,9 +2,6 @@
 #define PRICELEVEL_HPP
 
 #include "ds.hpp"
-
-
-
 class PriceLevel
 {
     const price_t price;

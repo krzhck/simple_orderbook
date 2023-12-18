@@ -1,29 +1,16 @@
 #include "order.hpp"
 #include "pricelevel.hpp"
+#include "pricelist.hpp"
 class Orderbook
 {
-    std::vector<PriceLevel> price_levels;
+    PriceList price_list;
     std::unordered_map<oid_t, Order> orders;
 
     PriceLevel GetBetterPriceLevel(Order &order) const
     {
     }
 
-    void InsertPriceLevel(PriceLevel &level)
-    {
-        // Insert price level in sorted order
-        if (price_levels.empty())
-        {
-            price_levels.push_back(level);
-            return;
-        }
-        auto size = price_levels.size();
-        // binary insert
-        auto it = std::lower_bound(price_levels.begin(), price_levels.end(), level);
-        price_levels.insert(it, level);
-        // DOING
 
-    }
 
 public:
     Orderbook() = default;
@@ -42,7 +29,7 @@ public:
         }
     }
 
-    void DeleteOrder(oid_t oid)
+    void WithdrawOrder(oid_t oid)
     {
         
     }
