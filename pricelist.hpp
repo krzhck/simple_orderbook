@@ -6,23 +6,37 @@
 
 class PriceList
 {
-    std::map<price_t, PriceLevel> price_list;
+    std::map<price_t, PriceLevel*> price_list;
 
     public:
 
     PriceList() = default;
-    PriceList(const PriceList& other) = default;
-    PriceList(PriceList&& other) = default;
+    ~PriceList()
+    {
+        for (auto& price_level : price_list)
+        {
+            delete price_level.second;
+        }
+    }
 
-    PriceLevel& operator[] (const price_t& price)
+    PriceLevel* operator[] (const price_t& price)
     {
         return price_list[price];
     }
 
-    void insert(const price_t& price)
+    void AddUpdate(Order* order)
     {
+        price_t price = order->get_price();
+        if (price_list.find(price) == price_list.end())
+        {
+            price_list[price] = new PriceLevel(price);
+        }
+        price_list[price]->PushOrder(order);
+    }
 
-        price_list.insert(std::make_pair(price, PriceLevel(price)));
+    void WithdrawUpdate(Order* order)
+    {
+        // TODO
     }
 
     PriceLevel& FindBetter()

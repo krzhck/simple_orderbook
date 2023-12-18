@@ -4,34 +4,30 @@
 class Orderbook
 {
     PriceList price_list;
-    std::unordered_map<oid_t, Order> orders;
-
-    PriceLevel GetBetterPriceLevel(Order &order) const
-    {
-    }
-
-
+    std::unordered_map<oid_t, Order*> orders;
 
 public:
     Orderbook() = default;
 
+    ~Orderbook()
+    {
+        for (auto it = orders.begin(); it != orders.end(); ++it)
+        {
+            delete it->second;
+        } 
+    }
+
     void AddOrder(oid_t oid, price_t price, qty_t qty, OrderType type)
     {
-        Order order(oid, price, qty, type);
+        Order* order = new Order(oid, price, qty, type);
         orders[oid] = order;
-        if (type == OrderType::BUY)
-        {
-            
-        }
-        else
-        {
-            
-        }
+        price_list.AddUpdate(order);
     }
 
     void WithdrawOrder(oid_t oid)
     {
-        
+        price_list.WithdrawUpdate(orders[oid]);
+        orders.erase(oid);
     }
 
     void GetBuyPriceLevels(std::vector<PriceLevel> &levels, int max_levels) const
@@ -41,6 +37,7 @@ public:
 
     void GetSellPriceLevels(std::vector<PriceLevel> &levels, int max_levels) const
     {
+        
     }
 
     void Match(oid_t oid)
@@ -79,5 +76,4 @@ public:
         }
     }
 
-    ~Orderbook() = default;
 };
