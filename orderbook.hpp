@@ -11,9 +11,9 @@ public:
 
     ~Orderbook()
     {
-        for (auto it = orders.begin(); it != orders.end(); ++it)
+        for (auto& order: orders)
         {
-            delete it->second;
+            delete order.second;
         } 
     }
 
@@ -62,44 +62,18 @@ public:
     {
         price_list.PrintAllLevels();
     }
-
-    /*
+    
     void Match(oid_t oid)
     {
+        // DOING
+        std::cout << "Matching order " << oid << std::endl;
         if (orders.find(oid) == orders.end())
         {
             std::cout << "Order " << oid << " not found" << std::endl;
             return;
         }
-        Order order = orders[oid];
-        if (order.get_type() == OrderType::BUY)
-        {
-            // Match with sell orders 
-
-            while (!sellOrders.empty() && newOrder.quantity > 0 && newOrder.price >= sellOrders.top().price) {
-                // Process buy order with available sell orders
-                Order topSell = sellOrders.top();
-                sellOrders.pop();
-                int quantityToTrade = std::min(newOrder.quantity, topSell.quantity);
-                newOrder.quantity -= quantityToTrade;
-                topSell.quantity -= quantityToTrade;
-
-                if (topSell.quantity > 0) {
-                    sellOrders.push(topSell);
-                }
-
-                std::cout << "Traded: " << quantityToTrade << " at price " << topSell.price << std::endl;
-            }
-            if (newOrder.quantity > 0) {
-                buyOrders.push(newOrder);
-            }
-        }
-        else
-        {
-            // Match with buy orders
-        }
     }
-    */
+    
     
 
 };

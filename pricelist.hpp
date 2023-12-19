@@ -38,8 +38,7 @@ class PriceList
 
     void WithdrawUpdate(Order* order)
     {
-        // DOING
-        std::cout << "WithdrawUpdate" << std::endl;
+        // std::cout << "WithdrawUpdate" << std::endl;
         price_t price = order->get_price();
         if (price_list.find(price) == price_list.end())
         {
@@ -52,11 +51,6 @@ class PriceList
             delete price_list[price];
             price_list.erase(price);
         }
-    }
-
-    PriceLevel& FindBetter()
-    {
-        // TODO
     }
 
     void PrintAllLevels()
