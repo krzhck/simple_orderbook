@@ -25,20 +25,37 @@ public:
     }
 
     void WithdrawOrder(oid_t oid)
-    {
+    {   
+        if (orders.find(oid) == orders.end())
+        {
+            std::cout << "Order " << oid << " not found" << std::endl;
+            return;
+        }
+
         price_list.WithdrawUpdate(orders[oid]);
+        delete orders[oid];
         orders.erase(oid);
     }
 
     void PrintAllOrders()
     {
-        std::cout << "Printing all orders" << std::endl;
+        std::cout << "Printing all orders:" << std::endl;
         for (auto it = orders.begin(); it != orders.end(); ++it)
         {
-            //std::cout << it->second->get_oid() << " " << it->second->get_price() << " " << it->second->get_qty() << " " << it->second->get_type() << std::endl;
-            //it->second->print();
             std::cout << *(it->second) << std::endl;
         }
+        std::cout << orders.size() << " order(s) in total" << std::endl;
+    }
+
+    void PrintSingleOrder(oid_t oid)
+    {
+        std::cout << "Printing single order:" << std::endl;
+        if (orders.find(oid) == orders.end())
+        {
+            std::cout << "Order " << oid << " not found" << std::endl;
+            return;
+        }
+        std::cout << *(orders[oid]) << std::endl;
     }
 
     void PrintAllPriceLevels()

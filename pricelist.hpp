@@ -26,17 +26,32 @@ class PriceList
 
     void AddUpdate(Order* order)
     {
+        // update price level itself
         price_t price = order->get_price();
         if (price_list.find(price) == price_list.end())
         {
             price_list[price] = new PriceLevel(price);
         }
+        // then push order into queue
         price_list[price]->PushOrder(order);
     }
 
     void WithdrawUpdate(Order* order)
     {
-        // TODO
+        // DOING
+        std::cout << "WithdrawUpdate" << std::endl;
+        price_t price = order->get_price();
+        if (price_list.find(price) == price_list.end())
+        {
+            std::cout << "Price level not found" << std::endl;
+            return;
+        }
+        price_list[price]->WithdrawOrder(order);
+        if (price_list[price]->get_qty() == 0)
+        {
+            delete price_list[price];
+            price_list.erase(price);
+        }
     }
 
     PriceLevel& FindBetter()
@@ -50,8 +65,9 @@ class PriceList
         std::map<price_t, PriceLevel*>::iterator it;
         for (it = price_list.begin(); it != price_list.end(); ++it)
         {
-            std::cout << it->first << std::endl;
+            std::cout << *(it->second) << std::endl;
         }
+        std::cout << price_list.size() << " price level(s) in total" << std::endl;
     }
 };
 

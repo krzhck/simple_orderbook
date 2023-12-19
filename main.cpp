@@ -10,8 +10,14 @@ int main()
     book->AddOrder(1, 100, 10, OrderType::BUY);
     book->AddOrder(2, 100, 10, OrderType::BUY);
     book->AddOrder(3, 200, 10, OrderType::BUY);
-    book->AddOrder(4, 100, 10, OrderType::BUY);
+    book->AddOrder(4, 100, 10, OrderType::SELL);
 
+    book->PrintAllOrders();
+
+    //book->PrintSingleOrder(5);
+
+    book->WithdrawOrder(1);
+    book->WithdrawOrder(3);
 
     book->PrintAllOrders();
     
