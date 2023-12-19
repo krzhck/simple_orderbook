@@ -43,6 +43,16 @@ class PriceList
     {
         // TODO
     }
+
+    void PrintAllLevels()
+    {
+        std::cout << "Printing all price levels" << std::endl;
+        std::map<price_t, PriceLevel*>::iterator it;
+        for (it = price_list.begin(); it != price_list.end(); ++it)
+        {
+            std::cout << it->first << std::endl;
+        }
+    }
 };
 
 #endif // PRICELIST_HPP

@@ -27,6 +27,12 @@ public:
         }
         qty += order->get_qty();
     }
+
+    friend std::ostream& operator<< (std::ostream& os, const PriceLevel& level)
+    {
+        os << "[" << level.price << "] " << std::endl;
+        return os;
+    }
 };
 
 #endif // PRICELEVEL_HPP

@@ -30,15 +30,22 @@ public:
         orders.erase(oid);
     }
 
-    void GetBuyPriceLevels(std::vector<PriceLevel> &levels, int max_levels) const
+    void PrintAllOrders()
     {
-
+        std::cout << "Printing all orders" << std::endl;
+        for (auto it = orders.begin(); it != orders.end(); ++it)
+        {
+            //std::cout << it->second->get_oid() << " " << it->second->get_price() << " " << it->second->get_qty() << " " << it->second->get_type() << std::endl;
+            //it->second->print();
+            std::cout << *(it->second) << std::endl;
+        }
     }
 
-    void GetSellPriceLevels(std::vector<PriceLevel> &levels, int max_levels) const
+    void PrintAllPriceLevels()
     {
-        
+        price_list.PrintAllLevels();
     }
+
     /*
     void Match(oid_t oid)
     {

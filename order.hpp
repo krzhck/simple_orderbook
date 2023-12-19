@@ -62,6 +62,12 @@ public:
     {
         std::cout << "oid: " << oid << ", price: " << price << ", qty: " << qty << ", type: " << (type == OrderType::BUY ? "BUY" : "SELL") << std::endl;
     }
+
+    friend std::ostream &operator<<(std::ostream &os, const Order &order)
+    {
+        os << "oid: " << order.oid << ", price: " << order.price << ", qty: " << order.qty << ", type: " << (order.type == OrderType::BUY ? "BUY" : "SELL");
+        return os;
+    }
 };
 
 #endif // ORDER_HPP
