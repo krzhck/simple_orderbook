@@ -8,7 +8,7 @@ int main()
 
 
     book->AddOrder(1, 100, 10, OrderType::BUY);
-    book->AddOrder(2, 200, 10, OrderType::BUY);
+    book->AddOrder(1, 200, 10, OrderType::BUY);
     book->AddOrder(3, 300, 10, OrderType::BUY);
     //book->AddOrder(4, 400, 10, OrderType::BUY);
     //book->AddOrder(5, 100, 10, OrderType::SELL);

@@ -26,6 +26,12 @@ public:
 
     void AddOrder(oid_t oid, price_t price, qty_t qty, OrderType type)
     {
+        if (orders.find(oid) != orders.end())
+        {
+            std::cout << "Order " << oid << " already exists" << std::endl;
+            return;
+        }
+
         Order* order = new Order(oid, price, qty, type);
         orders[oid] = order;
         price_list->AddUpdate(order);
