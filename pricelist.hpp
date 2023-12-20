@@ -86,7 +86,7 @@ class PriceList
             return;
         }
         price_levels[price]->WithdrawOrder(order);
-        if (price_levels[price]->get_qty() == 0)
+        if (price_levels[price]->get_qty() <= 0)
         {
             delete price_levels[price];
             price_levels.erase(price);

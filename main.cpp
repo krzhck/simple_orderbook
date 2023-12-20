@@ -16,7 +16,7 @@ int main()
     book->AddOrder(7, 300, 10, OrderType::SELL);
     book->AddOrder(8, 400, 10, OrderType::SELL);
 
-    //book->AddOrder(10, 1000, 25, OrderType::BUY);
+    book->AddOrder(10, 1000, 25, OrderType::BUY);
 
     book->AddOrder(11, 10, 10, OrderType::SELL);
 
@@ -30,7 +30,7 @@ int main()
 
     //book->PrintAllOrders();
 
-    //book->Match(10);
+    book->Match(10);
     book->Match(11);
 
     book->PrintAllOrders();
