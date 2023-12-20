@@ -6,14 +6,14 @@
 
 class PriceList
 {
-    std::map<price_t, PriceLevel*> price_list;
+    std::map<price_t, PriceLevel*> price_levels;
 
     public:
 
     PriceList() = default;
     ~PriceList()
     {
-        for (auto& price_level : price_list)
+        for (auto& price_level : price_levels)
         {
             delete price_level.second;
         }
@@ -21,35 +21,75 @@ class PriceList
 
     PriceLevel* operator[] (const price_t& price)
     {
-        return price_list[price];
+        return price_levels[price];
+    }
+
+    PriceLevel* BetterLevel(Order* order)
+    {
+        auto it = price_levels.find(order->get_price());
+        if (it == price_levels.end())
+        {
+            return nullptr;
+        }
+
+        if (order->get_type() == OrderType::BUY)
+        {
+            // buy find lower
+            while (it != price_levels.begin())
+            {
+                if (it->second->get_sell_qty() > 0)
+                {
+                    return it->second;
+                }
+                it--;
+            }
+            if (it->second->get_sell_qty() > 0)
+            {
+                return it->second;
+            }
+        }
+
+        else
+        {
+            // sell find higher
+            while (it != price_levels.end())
+            {
+                if (it->second->get_buy_qty() > 0)
+                {
+                    return it->second;
+                }
+                it++;
+            }
+        }
+        return nullptr;
     }
 
     void AddUpdate(Order* order)
     {
         // update price level itself
         price_t price = order->get_price();
-        if (price_list.find(price) == price_list.end())
+        if (price_levels.find(price) == price_levels.end())
         {
-            price_list[price] = new PriceLevel(price);
+            price_levels[price] = new PriceLevel(price);
         }
         // then push order into queue
-        price_list[price]->PushOrder(order);
+        price_levels[price]->PushOrder(order);
     }
 
     void WithdrawUpdate(Order* order)
     {
         // std::cout << "WithdrawUpdate" << std::endl;
         price_t price = order->get_price();
-        if (price_list.find(price) == price_list.end())
+        if (price_levels.find(price) == price_levels.end())
         {
             std::cout << "Price level not found" << std::endl;
             return;
         }
-        price_list[price]->WithdrawOrder(order);
-        if (price_list[price]->get_qty() == 0)
+        price_levels[price]->WithdrawOrder(order);
+        if (price_levels[price]->get_qty() == 0)
         {
-            delete price_list[price];
-            price_list.erase(price);
+            delete price_levels[price];
+            price_levels.erase(price);
         }
     }
 
@@ -57,11 +97,11 @@ class PriceList
     {
         std::cout << "Printing all price levels" << std::endl;
         std::map<price_t, PriceLevel*>::iterator it;
-        for (it = price_list.begin(); it != price_list.end(); ++it)
+        for (it = price_levels.begin(); it != price_levels.end(); ++it)
         {
             std::cout << *(it->second) << std::endl;
         }
-        std::cout << price_list.size() << " price level(s) in total" << std::endl;
+        std::cout << price_levels.size() << " price level(s) in total" << std::endl;
     }
 };
 
