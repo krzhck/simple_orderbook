@@ -42,6 +42,19 @@ public:
         return (type == OrderType::BUY) ? buy_qty : sell_qty;
     }
 
+    void QtyUpdate(Order* order, qty_t d)
+    {
+        if (order->get_type() == OrderType::BUY)
+        {
+            buy_qty += d;
+        }
+        else
+        {
+            sell_qty += d;
+        }
+        qty += d;
+    }
+
     void PushOrder(Order* order)
     {
         if (order == nullptr)
@@ -78,7 +91,7 @@ public:
             sell_qty -= q;
         }
         qty -= q;
-        std::cout << "WithdrawOrder: q = " << qty << std::endl;
+        std::cout << "WithdrawOrder[" << order->get_oid() << "]: q = " << qty << std::endl;
     }
 
     void PopOrder(OrderType type)

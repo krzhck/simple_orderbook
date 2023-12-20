@@ -89,6 +89,7 @@ public:
         }
 
         Order* order = orders[oid];
+        PriceLevel* price = (*price_list)[order->get_price()];
         OrderType type = order->get_type();
 
         std::cout << "Order: " << *order << std::endl;
@@ -106,7 +107,6 @@ public:
                 return;
             }
             std::cout << "Better level: " << *b_level << std::endl;
-            
             // dequeue
             while (b_level->get_type_qty(!type) > 0)
             {
@@ -123,13 +123,16 @@ public:
                 {
                     // need pop
                     std::cout << "need pop" << std::endl;
+                    
                     order->set_qty(qty - opp_qty);
+                    price->QtyUpdate(order, -opp_qty);
+                    
                     b_level->PopOrder(!type);
                     opp_order->set_qty(0);
                     WithdrawOrder(opp_order->get_oid());
+
                     if (order->get_qty() == 0)
                     {
-                        // TODO
                         break;
                     }
                 }
@@ -137,11 +140,15 @@ public:
                 {
                     std::cout << "need no pop" << std::endl;
                     order->set_qty(0);
+                    price->QtyUpdate(order, -qty);
+
                     opp_order->set_qty(opp_qty - qty);
+                    b_level->QtyUpdate(opp_order, -qty);
                     break;
                 }
             }
         }
-        // TODO: withdraw 原有的qty而不是更新的qty！！！
+        if (order->get_qty() == 0)
+            WithdrawOrder(oid);
     }
 };
