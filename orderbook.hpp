@@ -72,6 +72,8 @@ public:
             std::cout << "Order " << oid << " not found" << std::endl;
             return;
         }
+
+        Order* order = orders[oid];
     }
     
     
