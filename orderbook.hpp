@@ -21,7 +21,7 @@ public:
         for (auto& order: orders)
         {
             delete order.second;
-        } 
+        }
     }
 
     void AddOrder(oid_t oid, price_t price, qty_t qty, OrderType type)
@@ -41,13 +41,14 @@ public:
     {   
         if (orders.find(oid) == orders.end())
         {
-            std::cout << "Order " << oid << " not found" << std::endl;
+            std::cout << "WithdrawOrder() Order " << oid << " not found" << std::endl;
             return;
         }
 
         price_list->WithdrawUpdate(orders[oid]);
         delete orders[oid];
         orders.erase(oid);
+        std::cout << "Order " << oid << " withdrawn" << std::endl;
     }
 
     void PrintAllOrders()
@@ -65,7 +66,7 @@ public:
         std::cout << "Printing single order:" << std::endl;
         if (orders.find(oid) == orders.end())
         {
-            std::cout << "Order " << oid << " not found" << std::endl;
+            std::cout << "PrintSingleOrder() Order " << oid << " not found" << std::endl;
             return;
         }
         std::cout << *(orders[oid]) << std::endl;
@@ -77,39 +78,70 @@ public:
     }
     
     void Match(oid_t oid)
+    // TODO: withdraw 原有的qty而不是更新的qty！！！
     {
         // DOING
         std::cout << "Matching order " << oid << std::endl;
         if (orders.find(oid) == orders.end())
         {
-            std::cout << "Order " << oid << " not found" << std::endl;
+            std::cout << "Match() Order " << oid << " not found" << std::endl;
             return;
         }
 
         Order* order = orders[oid];
+        OrderType type = order->get_type();
+
         std::cout << "Order: " << *order << std::endl;
+        
+        PriceLevel* b_level = nullptr;
+        Order* opp_order = nullptr;
+
         while (order->get_qty() > 0)
         {
-            PriceLevel* b_level = price_list->BetterLevel(order);
+            b_level = price_list->BetterLevel(order);
             if (b_level == nullptr)
             {
                 // no better price
                 std::cout << "No better price level" << std::endl;
-                break;
+                return;
             }
             std::cout << "Better level: " << *b_level << std::endl;
-
-            while (order->get_qty() > 0)
+            
+            // dequeue
+            while (b_level->get_type_qty(!type) > 0)
             {
-                // dequeue
-                break;
+                opp_order = b_level->FirstOrder(!type);
+                if (opp_order == nullptr)
+                {
+                    continue;
+                }
+                // trade
+                std::cout << "Opposite order: " << *opp_order << std::endl;
+                auto qty = order->get_qty();
+                auto opp_qty = opp_order->get_qty();
+                if (qty >= opp_qty)
+                {
+                    // need pop
+                    std::cout << "need pop" << std::endl;
+                    order->set_qty(qty - opp_qty);
+                    b_level->PopOrder(!type);
+                    opp_order->set_qty(0);
+                    WithdrawOrder(opp_order->get_oid());
+                    if (order->get_qty() == 0)
+                    {
+                        // TODO
+                        break;
+                    }
+                }
+                else
+                {
+                    std::cout << "need no pop" << std::endl;
+                    order->set_qty(0);
+                    opp_order->set_qty(opp_qty - qty);
+                    break;
+                }
             }
-            break;
         }
-
-        // if none left, delete order
-        if (order->get_qty() == 0)
-            WithdrawOrder(oid);
+        // TODO: withdraw 原有的qty而不是更新的qty！！！
     }
-
 };

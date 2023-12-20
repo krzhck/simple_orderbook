@@ -37,6 +37,11 @@ public:
         return sell_qty;
     }
 
+    qty_t get_type_qty(OrderType type) const
+    {
+        return (type == OrderType::BUY) ? buy_qty : sell_qty;
+    }
+
     void PushOrder(Order* order)
     {
         if (order == nullptr)
@@ -73,23 +78,42 @@ public:
             sell_qty -= q;
         }
         qty -= q;
+        std::cout << "WithdrawOrder: q = " << qty << std::endl;
     }
 
-    Order* PopOrder(OrderType type)
+    void PopOrder(OrderType type)
     {   
-        // TODO: maybe pop later
-        std::queue<Order*> &q = (type == OrderType::BUY) ? buy_orders : sell_orders;
-        Order* order = q.front();
-        while (order != nullptr && !q.empty())
-        {   
-            if (q.front()->get_qty() > 0)
-            {
-                continue;
-            }
-            q.pop();
-            order = q.front();
+        if (this->get_type_qty(type) == 0)
+        {
+            return;
         }
-        return order;
+
+        std::queue<Order*> &q = (type == OrderType::BUY) ? buy_orders : sell_orders;
+        if (q.front() == nullptr)
+        {   
+            q.pop();
+            return;
+        }
+        while (q.front() == nullptr || q.front()->get_qty() == 0)
+        {
+            q.pop();
+        }
+        auto del = q.front()->get_qty();
+        q.pop();
+        qty -= del;
+        if (type == OrderType::BUY)
+        {
+            buy_qty -= del;
+        }
+        else
+        {
+            sell_qty -= del;
+        }
+    }
+
+    Order* FirstOrder(OrderType type)
+    {
+        return (type == OrderType::BUY) ? buy_orders.front() : sell_orders.front();
     }
 
     friend std::ostream& operator<< (std::ostream& os, const PriceLevel& level)

@@ -5,10 +5,10 @@
 
 class Order
 {
-    oid_t oid;
+    const oid_t oid;
     price_t price;
     qty_t qty;
-    OrderType type;
+    const OrderType type;
 
 public:
     Order(oid_t oid, price_t price, qty_t qty, OrderType type)
@@ -24,18 +24,6 @@ public:
     bool operator!=(const Order &rhs) const
     {
         return !(*this == rhs);
-    }
-
-    bool IsBetterThan(const Order &rhs) const
-    {
-        if (type == OrderType::BUY)
-        {
-            return price > rhs.get_price();
-        }
-        else
-        {
-            return price < rhs.get_price();
-        }
     }
 
     oid_t get_oid() const
@@ -56,6 +44,11 @@ public:
     OrderType get_type() const
     {
         return type;
+    }
+
+    void set_qty(qty_t qty)
+    {
+        this->qty = qty;
     }
 
     void print() const

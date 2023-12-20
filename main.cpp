@@ -8,13 +8,17 @@ int main()
 
 
     book->AddOrder(1, 100, 10, OrderType::BUY);
-    book->AddOrder(1, 200, 10, OrderType::BUY);
+    book->AddOrder(2, 200, 10, OrderType::BUY);
     book->AddOrder(3, 300, 10, OrderType::BUY);
     //book->AddOrder(4, 400, 10, OrderType::BUY);
     //book->AddOrder(5, 100, 10, OrderType::SELL);
     book->AddOrder(6, 200, 10, OrderType::SELL);
     book->AddOrder(7, 300, 10, OrderType::SELL);
     book->AddOrder(8, 400, 10, OrderType::SELL);
+
+    //book->AddOrder(10, 1000, 25, OrderType::BUY);
+
+    book->AddOrder(11, 10, 10, OrderType::SELL);
 
     book->PrintAllOrders();
     book->PrintAllPriceLevels();
@@ -26,7 +30,12 @@ int main()
 
     //book->PrintAllOrders();
 
-    book->Match(1);
+    //book->Match(10);
+    book->Match(11);
+
+    book->PrintAllOrders();
+    book->PrintAllPriceLevels();
+
     delete book;
     return 0;
 }
