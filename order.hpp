@@ -11,20 +11,11 @@ class Order
     const OrderType type;
 
 public:
+    Order() = delete;
     Order(oid_t oid, price_t price, qty_t qty, OrderType type)
         : oid(oid), price(price), qty(qty), type(type) {}
     
     ~Order() = default;
-
-    bool operator==(const Order &rhs) const
-    {
-        return oid == rhs.get_oid();
-    }
-
-    bool operator!=(const Order &rhs) const
-    {
-        return !(*this == rhs);
-    }
 
     oid_t get_oid() const
     {
@@ -49,11 +40,6 @@ public:
     void set_qty(qty_t qty)
     {
         this->qty = qty;
-    }
-
-    void print() const
-    {
-        std::cout << "oid: " << oid << ", price: " << price << ", qty: " << qty << ", type: " << (type == OrderType::BUY ? "BUY" : "SELL") << std::endl;
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Order &order)

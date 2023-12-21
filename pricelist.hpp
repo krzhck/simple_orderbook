@@ -24,7 +24,7 @@ class PriceList
         return price_levels[price];
     }
 
-    PriceLevel* BetterLevel(Order* order)
+    PriceLevel* BetterPrice(Order* order)
     {
         auto it = price_levels.find(order->get_price());
         if (it == price_levels.end())
@@ -78,13 +78,13 @@ class PriceList
 
     void WithdrawUpdate(Order* order)
     {
-        // std::cout << "WithdrawUpdate" << std::endl;
         price_t price = order->get_price();
         if (price_levels.find(price) == price_levels.end())
         {
             std::cout << "Price level not found" << std::endl;
             return;
         }
+
         price_levels[price]->WithdrawOrder(order);
         if (price_levels[price]->get_qty() <= 0)
         {

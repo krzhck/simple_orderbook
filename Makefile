@@ -1,6 +1,3 @@
-#makefile
-# Created on: 2013-11-25 下午4:00:00
-
 CC = g++
 CFLAGS = -g -Wall -O2
 
